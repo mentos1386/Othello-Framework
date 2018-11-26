@@ -1,5 +1,6 @@
 package main;
 
+
 import com.eudycontreras.othello.capsules.AgentMove;
 import com.eudycontreras.othello.controllers.AgentController;
 import com.eudycontreras.othello.controllers.Agent;
@@ -21,7 +22,7 @@ import com.eudycontreras.othello.threading.TimeSpan;
  */
 public class ExampleAgentA extends Agent{
 	
-	private ExampleAgentA() {
+	ExampleAgentA() {
 		super(PlayerTurn.PLAYER_ONE);
 		// TODO Auto-generated constructor stub
 	}
@@ -31,6 +32,7 @@ public class ExampleAgentA extends Agent{
 		// TODO Auto-generated constructor stub
 	}
 
+	
 	/**
 	 * Delete the content of this method and Implement your logic here!
 	 */
@@ -49,11 +51,10 @@ public class ExampleAgentA extends Agent{
 	 */
 	private AgentMove getExampleMove(GameBoardState gameState){
 		
-		int waitTime = UserSettings.MIN_SEARCH_TIME; // 1.5 seconds
+		int waitTime = UserSettings.MIN_SEARCH_TIME;
 		
 		ThreadManager.pause(TimeSpan.millis(waitTime)); // Pauses execution for the wait time to cause delay
 		
-		return AgentController.getExampleMove(gameState, playerTurn); // returns an example AI move Note: this is not AB Pruning
+		return AgentController.findBestMove(gameState, playerTurn); // returns an example AI move Note: this is not AB Pruning
 	}
-
 }
