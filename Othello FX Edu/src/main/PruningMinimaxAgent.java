@@ -26,7 +26,7 @@ public class PruningMinimaxAgent extends Agent {
     public AgentMove getMove(GameBoardState gameState) {
         gameState = GameTreeUtility.buildDecissionTree(gameState, this.maxDepth, this.maxTime);
 
-        AlphaBetaValue alphaBetaValue = this.alphaBeta(gameState, this.maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        AlphaBetaValue alphaBetaValue = this.alphaBeta(gameState, this.maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
 
         GameBoardState backtrackState = alphaBetaValue.state;
         while(true) {
@@ -39,12 +39,11 @@ public class PruningMinimaxAgent extends Agent {
 
 
 
-    private AlphaBetaValue alphaBeta(GameBoardState node, Integer depth, Integer alpha, Integer beta) {
+    private AlphaBetaValue alphaBeta(GameBoardState node, Integer depth, Integer alpha, Integer beta, boolean maximizePLayer) {
         this.setNodesExamined(this.getNodesExamined() + 1);
 
         if (depth == 0 || node.getChildStates().isEmpty()) {
             if (this.maxDepth - depth > this.getSearchDepth()) {
-                System.out.println(this.maxDepth + " ; " + depth);
                 this.setSearchDepth(this.maxDepth - depth);
             }
 
@@ -52,36 +51,41 @@ public class PruningMinimaxAgent extends Agent {
             return new AlphaBetaValue(node.getWhiteCount() - node.getBlackCount(), node);
 //            return node.getParentState().getTotalReward(new MoveWrapper(node.getLeadingMove()));
         }
-        if (node.getPlayerTurn().equals(this.getPlayerTurn())) {
+        if (maximizePLayer) {
             AlphaBetaValue bestCandidat = new AlphaBetaValue(Integer.MIN_VALUE, null);
 
-            for (GameBoardState child : node.getChildStates()) {
-                AlphaBetaValue childValue = this.alphaBeta(child, depth - 1, alpha, beta);
+            for (int i = 0; i < node.getChildStates().size(); i++) {
+                GameBoardState child =  node.getChildStates().get(i);
 
-                if (childValue.value > bestCandidat.value) {
-                    bestCandidat = childValue;
-                }
-                if (alpha > bestCandidat.value) alpha = bestCandidat.value;
+                AlphaBetaValue childValue = this.alphaBeta(child, depth - 1, alpha, beta, false);
+
+                if (childValue.value > bestCandidat.value) bestCandidat = childValue;
+                if (bestCandidat.value > alpha) alpha = bestCandidat.value;
 
                 if (alpha >= beta) {
-//                  break (* β cut-off *)
+                    // break (* β cut-off *)
                     node.removeChildState(child);
                     this.setPrunedCounter(this.getPrunedCounter() + 1);
+                    i--;
                 }
             }
             return bestCandidat;
         } else {
             AlphaBetaValue bestCandidat = new AlphaBetaValue(Integer.MAX_VALUE, null);
-            for (GameBoardState child : node.getChildStates()) {
-                AlphaBetaValue childValue = this.alphaBeta(child, depth - 1, alpha, beta);
+
+            for (int i = 0; i < node.getChildStates().size(); i++) {
+                GameBoardState child =  node.getChildStates().get(i);
+
+                AlphaBetaValue childValue = this.alphaBeta(child, depth - 1, alpha, beta, true);
 
                 if (childValue.value < bestCandidat.value) bestCandidat = childValue;
-                if (beta < bestCandidat.value) beta = bestCandidat.value;
+                if (bestCandidat.value < beta) beta = bestCandidat.value;
 
                 if (alpha >= beta) {
-//                  break (* α cut-off *)
+                    // break (* α cut-off *)
                     node.removeChildState(child);
                     this.setPrunedCounter(this.getPrunedCounter() + 1);
+                    i--;
                 }
             }
             return bestCandidat;
@@ -98,27 +102,3 @@ class AlphaBetaValue {
         this.state = state;
     }
 }
-
-//class MinimaxTreeNode {
-//    public MinimaxTreeNode parentNode;
-//    public List<ObjectiveWrapper> validMoves;
-//    public PlayerTurn player;
-//    public GameBoardState state;
-//
-//    public MinimaxTreeNode(GameBoardState state, PlayerTurn player) {
-//        this.parentNode = null;
-//        this.state = state;
-//        this.player = player;
-//        this.validMoves =
-//    }
-//
-//
-//    public MinimaxTreeNode(MinimaxTreeNode parentNode, GameBoardState state, PlayerTurn player) {
-//        this.parentNode = parentNode;
-//        this.state = state;
-//        this.player = player;
-//        this.validMoves = AgentController.getAvailableMoves(state, this.getOppositePLayer(this.player));
-//    }
-//
-//
-//}
