@@ -13,37 +13,29 @@ import com.eudycontreras.othello.enumerations.TraversalCardinal;
 import com.eudycontreras.othello.models.GameBoard;
 import com.eudycontreras.othello.models.GameBoardCell;
 
-
 /**
  * <H2>Created by</h2> Eudy Contreras
- * <h4> Mozilla Public License 2.0 </h4>
- * Licensed under the Mozilla Public License 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <a href="https://www.mozilla.org/en-US/MPL/2.0/">visit Mozilla Public Lincense Version 2.0</a>
+ * <h4>Mozilla Public License 2.0</h4> Licensed under the Mozilla Public License
+ * 2.0 (the "License"); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at
+ * <a href="https://www.mozilla.org/en-US/MPL/2.0/">visit Mozilla Public
+ * Lincense Version 2.0</a>
  * <H2>Class description</H2>
  * 
  * @author Eudy Contreras
  */
 public class TraversalUtility {
 
-	public static final TraversalCardinal[] CARDINALS = { 
-			TraversalCardinal.NORTH_WEST, 
-			TraversalCardinal.NORTH,
-			TraversalCardinal.NORTH_EAST, 
-			TraversalCardinal.EAST, 
-			TraversalCardinal.SOUTH_EAST, 
-			TraversalCardinal.SOUTH,
-			TraversalCardinal.SOUTH_WEST, 
-			TraversalCardinal.WEST, };
+	public static final TraversalCardinal[] CARDINALS = { TraversalCardinal.NORTH_WEST, TraversalCardinal.NORTH,
+			TraversalCardinal.NORTH_EAST, TraversalCardinal.EAST, TraversalCardinal.SOUTH_EAST, TraversalCardinal.SOUTH,
+			TraversalCardinal.SOUTH_WEST, TraversalCardinal.WEST, };
 
-	public static final Index[] OFFSETS = { 
-			new Index(-1,-1), // NORTH_WEST
-			new Index( 0,-1), // NORTH
-			new Index( 1,-1), // NORTH_EAST
-			new Index( 1, 0), // EAST
-			new Index( 1, 1), // SOUTH_EAST
-			new Index( 0, 1), // SOUTH
+	public static final Index[] OFFSETS = { new Index(-1, -1), // NORTH_WEST
+			new Index(0, -1), // NORTH
+			new Index(1, -1), // NORTH_EAST
+			new Index(1, 0), // EAST
+			new Index(1, 1), // SOUTH_EAST
+			new Index(0, 1), // SOUTH
 			new Index(-1, 1), // SOUTH_WEST
 			new Index(-1, 0), // WEST
 	};
@@ -129,7 +121,8 @@ public class TraversalUtility {
 			col = cell.getCol() - 1;
 
 			if (!rowIndexOutOfBounds(minRow, rowCount, row) && !colIndexOutOfBounds(minCol, colCount, col)) {
-				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell, TraversalCardinal.NORTH_WEST);
+				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell,
+						TraversalCardinal.NORTH_WEST);
 			} else {
 				return null;
 			}
@@ -138,7 +131,8 @@ public class TraversalUtility {
 			col = cell.getCol() - 1;
 
 			if (!colIndexOutOfBounds(minCol, colCount, col)) {
-				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell, TraversalCardinal.NORTH);
+				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell,
+						TraversalCardinal.NORTH);
 			} else {
 				return null;
 			}
@@ -147,7 +141,8 @@ public class TraversalUtility {
 			col = cell.getCol() - 1;
 
 			if (!rowIndexOutOfBounds(minRow, rowCount, row) && !colIndexOutOfBounds(minCol, colCount, col)) {
-				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell, TraversalCardinal.NORTH_EAST);
+				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell,
+						TraversalCardinal.NORTH_EAST);
 			} else {
 				return null;
 			}
@@ -156,7 +151,8 @@ public class TraversalUtility {
 			col = cell.getCol();
 
 			if (!rowIndexOutOfBounds(minRow, rowCount, row)) {
-				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell, TraversalCardinal.EAST);
+				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell,
+						TraversalCardinal.EAST);
 			} else {
 				return null;
 			}
@@ -165,7 +161,8 @@ public class TraversalUtility {
 			col = cell.getCol() + 1;
 
 			if (!rowIndexOutOfBounds(minRow, rowCount, row) && !colIndexOutOfBounds(minCol, colCount, col)) {
-				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell, TraversalCardinal.SOUTH_EAST);
+				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell,
+						TraversalCardinal.SOUTH_EAST);
 			} else {
 				return null;
 			}
@@ -174,7 +171,8 @@ public class TraversalUtility {
 			col = cell.getCol() + 1;
 
 			if (!colIndexOutOfBounds(minCol, colCount, col)) {
-				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell, TraversalCardinal.SOUTH);
+				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell,
+						TraversalCardinal.SOUTH);
 			} else {
 				return null;
 			}
@@ -183,7 +181,8 @@ public class TraversalUtility {
 			col = cell.getCol() + 1;
 
 			if (!rowIndexOutOfBounds(minRow, rowCount, row) && !colIndexOutOfBounds(minCol, colCount, col)) {
-				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell, TraversalCardinal.SOUTH_WEST);
+				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell,
+						TraversalCardinal.SOUTH_WEST);
 			} else {
 				return null;
 			}
@@ -192,7 +191,8 @@ public class TraversalUtility {
 			col = cell.getCol();
 
 			if (!rowIndexOutOfBounds(minRow, rowCount, row)) {
-				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell, TraversalCardinal.WEST);
+				return new DirectionWrapper(cell.getGameBoard().getGameBoardCell(row, col), cell,
+						TraversalCardinal.WEST);
 			} else {
 				return null;
 			}
@@ -240,7 +240,8 @@ public class TraversalUtility {
 		return neighbors;
 	}
 
-	private static void getTraversalPath(GameBoard grid, GameBoardCell origin, GameBoardCell cell, int depth, List<TraversalWrapper> neighbors, TraversalCardinal neighbor) {
+	private static void getTraversalPath(GameBoard grid, GameBoardCell origin, GameBoardCell cell, int depth,
+			List<TraversalWrapper> neighbors, TraversalCardinal neighbor) {
 
 		TraversalWrapper path = null;
 
@@ -267,7 +268,7 @@ public class TraversalUtility {
 
 		List<ObjectiveWrapper> wrappers = new LinkedList<>();
 
-		List<DirectionWrapper> neighbors =  getNeighborCells(cell, cell.getCounterCell(cell));
+		List<DirectionWrapper> neighbors = getNeighborCells(cell, cell.getCounterCell(cell));
 
 		for (DirectionWrapper neighbor : neighbors) {
 

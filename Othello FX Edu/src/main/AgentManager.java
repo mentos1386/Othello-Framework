@@ -2,7 +2,6 @@ package main;
 
 import com.eudycontreras.othello.application.Othello;
 import com.eudycontreras.othello.enumerations.BoardCellState;
-import com.eudycontreras.othello.enumerations.PlayerTurn;
 import com.eudycontreras.othello.models.GameBoardCell;
 
 import javafx.application.Application;

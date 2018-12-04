@@ -10,7 +10,6 @@ import com.eudycontreras.othello.models.GameBoardCell;
 import com.eudycontreras.othello.threading.ThreadTimer;
 import com.eudycontreras.othello.threading.TimeSpan;
 
-import javafx.application.Application;
 import javafx.stage.Stage;
 import main.UserSettings;
 
