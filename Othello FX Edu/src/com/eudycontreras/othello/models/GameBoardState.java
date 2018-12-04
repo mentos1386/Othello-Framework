@@ -170,6 +170,14 @@ public class GameBoardState {
 	}
 
 	/**
+	 * Remove child state from this state
+	 * @param childState
+	 */
+	public void removeChildState(GameBoardState childState) {
+		this.childStates.remove(childState);
+	}
+
+	/**
 	 * Calculates the total reward of this state
 	 * given the specified move.
 	 * @param move

@@ -5,15 +5,18 @@ import com.eudycontreras.othello.capsules.MoveWrapper;
 import com.eudycontreras.othello.capsules.ObjectiveWrapper;
 import com.eudycontreras.othello.controllers.Agent;
 import com.eudycontreras.othello.controllers.AgentController;
+import com.eudycontreras.othello.controllers.GameController;
 import com.eudycontreras.othello.enumerations.PlayerTurn;
 import com.eudycontreras.othello.models.GameBoardState;
+import com.eudycontreras.othello.utilities.GameTreeUtility;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class PruningMinimaxAgent extends Agent {
 
-    private Integer maxDepth = 2;
+    private Integer maxDepth = 5;
+    private Integer maxTime = 3000; // In ms?
 
     public PruningMinimaxAgent(String name, PlayerTurn playerTurn) {
         super(name, playerTurn);
@@ -21,37 +24,78 @@ public class PruningMinimaxAgent extends Agent {
 
     @Override
     public AgentMove getMove(GameBoardState gameState) {
-        gameState = this.createGameBoardStateTree(gameState);
+        gameState = GameTreeUtility.buildDecissionTree(gameState, this.maxDepth, this.maxTime);
 
+        AlphaBetaValue alphaBetaValue = this.alphaBeta(gameState, this.maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-        List<ObjectiveWrapper> test = AgentController.getAvailableMoves(gameState, getPlayerTurn());
-        return new MoveWrapper(test.get(0));
-    }
-
-    private GameBoardState createGameBoardStateTree(GameBoardState gameState) {
-        return this.createGameBoardStateTree(gameState, 0, this.getPlayerTurn());
-    }
-
-    private GameBoardState createGameBoardStateTree(GameBoardState gameState, Integer depth, PlayerTurn player) {
-        System.out.println("bananana" + depth);
-        if (depth > this.maxDepth) return gameState;
-
-        for (ObjectiveWrapper move: AgentController.getAvailableMoves(gameState, player)) {
-            GameBoardState moveState = AgentController.getNewState(gameState, move);
-            gameState.addChildState(this.createGameBoardStateTree(moveState, ++depth, this.getOppositePLayer(player)));
+        GameBoardState backtrackState = alphaBetaValue.state;
+        while(true) {
+            if (backtrackState.getParentState().equals(gameState)) {
+                return new MoveWrapper(backtrackState.getLeadingMove());
+            }
+            backtrackState = backtrackState.getParentState();
         }
-
-        return gameState;
     }
 
-    private PlayerTurn getOppositePLayer(PlayerTurn player) {
-        switch (player) {
-            case PLAYER_ONE:
-                return PlayerTurn.PLAYER_TWO;
-            case PLAYER_TWO:
-                return PlayerTurn.PLAYER_ONE;
+
+
+    private AlphaBetaValue alphaBeta(GameBoardState node, Integer depth, Integer alpha, Integer beta) {
+        this.setNodesExamined(this.getNodesExamined() + 1);
+
+        if (depth == 0 || node.getChildStates().isEmpty()) {
+            if (this.maxDepth - depth > this.getSearchDepth()) {
+                System.out.println(this.maxDepth + " ; " + depth);
+                this.setSearchDepth(this.maxDepth - depth);
+            }
+
+            this.setReachedLeafNodes(this.getReachedLeafNodes() + 1);
+            return new AlphaBetaValue(node.getWhiteCount() - node.getBlackCount(), node);
+//            return node.getParentState().getTotalReward(new MoveWrapper(node.getLeadingMove()));
         }
-        return null;
+        if (node.getPlayerTurn().equals(this.getPlayerTurn())) {
+            AlphaBetaValue bestCandidat = new AlphaBetaValue(Integer.MIN_VALUE, null);
+
+            for (GameBoardState child : node.getChildStates()) {
+                AlphaBetaValue childValue = this.alphaBeta(child, depth - 1, alpha, beta);
+
+                if (childValue.value > bestCandidat.value) {
+                    bestCandidat = childValue;
+                }
+                if (alpha > bestCandidat.value) alpha = bestCandidat.value;
+
+                if (alpha >= beta) {
+//                  break (* β cut-off *)
+                    node.removeChildState(child);
+                    this.setPrunedCounter(this.getPrunedCounter() + 1);
+                }
+            }
+            return bestCandidat;
+        } else {
+            AlphaBetaValue bestCandidat = new AlphaBetaValue(Integer.MAX_VALUE, null);
+            for (GameBoardState child : node.getChildStates()) {
+                AlphaBetaValue childValue = this.alphaBeta(child, depth - 1, alpha, beta);
+
+                if (childValue.value < bestCandidat.value) bestCandidat = childValue;
+                if (beta < bestCandidat.value) beta = bestCandidat.value;
+
+                if (alpha >= beta) {
+//                  break (* α cut-off *)
+                    node.removeChildState(child);
+                    this.setPrunedCounter(this.getPrunedCounter() + 1);
+                }
+            }
+            return bestCandidat;
+        }
+    }
+}
+
+class AlphaBetaValue {
+    public int value;
+    public GameBoardState state;
+
+    public AlphaBetaValue(int value, GameBoardState state) {
+        this.value = value;
+        this.state = state;
     }
 }
 
