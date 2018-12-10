@@ -59,6 +59,7 @@ public class PruningMinimaxAgent extends Agent {
             }
             this.setReachedLeafNodes(this.getReachedLeafNodes() + 1);
 
+
             // return AlphaBetaValue object, which has node and value of the node inside.
             // value of the node is a score of how good is the node. whiteCount - blackCount could be a score.
 //            return new AlphaBetaValue(node.getWhiteCount() - node.getBlackCount(), node);
@@ -67,7 +68,7 @@ public class PruningMinimaxAgent extends Agent {
 
         // Do the MAX step
         if (maximizePLayer) {
-            AlphaBetaValue bestCandidate = new AlphaBetaValue(Integer.MIN_VALUE, null);
+            AlphaBetaValue bestCandidate = new AlphaBetaValue(Double.MIN_VALUE, null);
 
             // Go through all the children
             for (int i = 0; i < node.getChildStates().size(); i++) {
@@ -91,7 +92,7 @@ public class PruningMinimaxAgent extends Agent {
             return bestCandidate;
         // Do the MIN step
         } else {
-            AlphaBetaValue bestCandidate = new AlphaBetaValue(Integer.MAX_VALUE, null);
+            AlphaBetaValue bestCandidate = new AlphaBetaValue(Double.MAX_VALUE, null);
 
             // Go through all the children
             for (int i = 0; i < node.getChildStates().size(); i++) {
